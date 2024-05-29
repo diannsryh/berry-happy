@@ -1,5 +1,5 @@
 import 'package:berry_happy/cart/cart_screen.dart';
-import 'package:berry_happy/cart/payment_screen.dart';
+// import 'package:berry_happy/cart/payment_screen.dart';
 import 'package:berry_happy/dashboard/dashboard_consumer.dart';
 import 'package:berry_happy/launch/launch_screen.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       home: const LaunchSceen(),
       routes: {
         '/dashboard-consumer': (context) => const DashboardConsumer(),
-        '/payment': (context) => const PaymentScreen(),
+        // '/payment': (context) => const PaymentScreen(),
         '/cart': (context) => const CartScreen()
       },
     );
