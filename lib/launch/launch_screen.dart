@@ -13,12 +13,12 @@ class _LaunchSceenState extends State<LaunchSceen> {
   void initState() {
     super.initState();
     // Navigasi otomatis setelah 5 detik
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
           context,
           PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  LoginScreen(),
+                  const LoginScreen(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
@@ -40,7 +40,7 @@ class _LaunchSceenState extends State<LaunchSceen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 204, 229),
+      backgroundColor: const Color.fromARGB(255, 255, 204, 229),
       body: Stack(
         //use to make text or image overlap each other
         children: [
