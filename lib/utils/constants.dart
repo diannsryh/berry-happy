@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 
 class Constants {
   static const Color primaryColor = Color.fromARGB(255, 255, 65, 158);
-  static const Color scaffoldBackgroundColor = Color.fromRGBO(245, 247, 249, 1);
-  static const Color activeMenu = Color(0xFFC8C9CB);
+  static const Color scaffoldBackgroundColor = Color.fromRGBO(255, 255, 255, 1);
+  static const Color activeMenu = Color.fromARGB(255, 167, 167, 167);
 }
 
 const secondaryColor = Color(0xFF5593f8);

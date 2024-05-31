@@ -9,6 +9,7 @@ import 'package:berry_happy/sign up/signup_screen.dart';
 import 'package:berry_happy/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -67,18 +68,67 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color.fromARGB(255, 250, 143, 195),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: null,
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          iconTheme: const IconThemeData(
-              color: Color.fromARGB(255, 255, 65, 158)), // recolor the icon
-        ),
+            backgroundColor: Color.fromARGB(255, 255, 204, 229),
+            elevation: 0.0,
+            iconTheme: const IconThemeData(color: Colors.black),
+            title: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // const SizedBox(width: 20),
+
+                  Text('BERRY HAPPY',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(width: 95),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/cart');
+                    },
+                    child: Stack(children: [
+                      const Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: Icon(Icons.shopping_cart, color: Colors.black),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 12,
+                            minHeight: 12,
+                          ),
+                          child: const Text(
+                            '3',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ],
+              ),
+            )),
         body: screens[activeIndex], //body will display the current active index
         bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: Constants.scaffoldBackgroundColor,
             buttonBackgroundColor: Constants.primaryColor,
+            color: Color.fromARGB(255, 255, 204, 229),
             items: [
               Icon(
                 Icons.home,
