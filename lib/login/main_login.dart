@@ -169,7 +169,7 @@ class _MainLoginState extends State<MainLogin> {
                 width: 250,
                 child: ElevatedButton(
                     onPressed: () =>
-                        Navigator.pushNamed(context, '/main-login'),
+                        Navigator.pushNamed(context, '/my-homepage'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor:
                             const Color.fromARGB(255, 255, 255, 255)),
