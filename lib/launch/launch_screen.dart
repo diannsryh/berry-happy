@@ -1,14 +1,14 @@
 import 'package:berry_happy/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
-class LaunchSceen extends StatefulWidget {
-  const LaunchSceen({super.key});
+class LaunchScreen extends StatefulWidget {
+  const LaunchScreen({super.key});
 
   @override
-  State<LaunchSceen> createState() => _LaunchSceenState();
+  State<LaunchScreen> createState() => _LaunchScreenState();
 }
 
-class _LaunchSceenState extends State<LaunchSceen> {
+class _LaunchScreenState extends State<LaunchScreen> {
   @override
   void initState() {
     super.initState();

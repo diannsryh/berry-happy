@@ -1,4 +1,6 @@
+import 'package:berry_happy/components/assets_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,49 +13,70 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 204, 229),
-      body: Column(
-        children: [
-          SizedBox(height: 100),
-          ElevatedButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, '/dashboard-consumer'),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 85, 27, 124)),
-              child: const Text(
-                'dasboard',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: AutofillHints.addressCity),
-              )),
-          ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/payment'),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 85, 27, 124)),
-              child: const Text(
-                'payment',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: AutofillHints.addressCity),
-              )),
-          ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/cart'),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 85, 27, 124)),
-              child: const Text(
-                'Cart',
-                style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: AutofillHints.addressCity),
-              ))
-        ],
-      ),
+      backgroundColor: const Color.fromARGB(255, 255, 204, 229),
+      body: SafeArea(
+          child: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            const AssetImageWidget(
+                imagePath: 'assets/images/logo.png',
+                height: 250,
+                width: 250,
+                fit: BoxFit.fill),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text(
+                "Let's Make Your Day Berry Special!",
+                style: GoogleFonts.poppins(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 40),
+            Container(
+              height: 50,
+              width: 250,
+              child: ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/main-login'),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color.fromARGB(255, 255, 255, 255)),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 255, 65, 158),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AutofillHints.addressCity),
+                  )),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Don't have account?"),
+                const SizedBox(height: 15),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/signup-screen');
+                  },
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      color: Colors
+                          .blue, // Ubah warna teks agar terlihat seperti link
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      )),
     );
   }
 }
