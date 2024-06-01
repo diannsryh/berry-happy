@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 250, 143, 195),
+        // backgroundColor: Color.fromARGB(255, 250, 143, 195),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             backgroundColor: Color.fromARGB(255, 255, 204, 229),
@@ -175,55 +175,6 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => NewsScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('CRUD SQLITE'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => AddCourse()));
-              },
-            ),
-            ListTile(
-              title: const Text('Data Screen'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => DatasScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Customer Service'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => CsScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Counter Screen'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => CounterScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Welcome Screen'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => WelcomeScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Balances Screen'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => BalanceScreen()));
-              },
-            ),
-            ListTile(
-              title: const Text('Spendings Screen'),
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => SpendingScreen()));
               },
             ),
           ],
