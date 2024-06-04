@@ -10,6 +10,7 @@ import 'package:berry_happy/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:berry_happy/cart/payment_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,16 +35,18 @@ class MyApp extends StatelessWidget {
         '/cart': (context) => const CartScreen(),
         '/main-login': (context) => const MainLogin(),
         '/signup-screen': (context) => const SignUp(),
-        '/my-homepage': (context) => MyHomePage()
+        '/my-homepage': (context) => const MyHomePage(),
+        '/payment': (context) => const PaymentWidget()
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key});
+  const MyHomePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyHomePageState createState() => _MyHomePageState();
 }
 
@@ -54,9 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> screens = [
     //a list of widget objects that represent the various screens available in the application.
-    DashboardConsumer(), //index 0
+    const DashboardConsumer(), //index 0
     const ConsumerProfile(), //index 1
     const SettingScreen(), //index 2
+    const PaymentWidget(),
   ];
 
   // void _onItemTapped(int index) {//method called when user on tap item in navigation
@@ -71,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // backgroundColor: Color.fromARGB(255, 250, 143, 195),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 255, 204, 229),
+            backgroundColor: const Color.fromARGB(255, 255, 204, 229),
             elevation: 0.0,
             iconTheme: const IconThemeData(color: Colors.black),
             title: Padding(
@@ -80,7 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // const SizedBox(width: 20),
-
                   Text('BERRY HAPPY',
                       style: GoogleFonts.poppins(
                         fontSize: 20,
@@ -100,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         right: 0,
                         top: 0,
                         child: Container(
-                          padding: EdgeInsets.all(1),
+                          padding: const EdgeInsets.all(1),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(6),
@@ -128,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
         bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: Constants.scaffoldBackgroundColor,
             buttonBackgroundColor: Constants.primaryColor,
-            color: Color.fromARGB(255, 255, 204, 229),
+            color: const Color.fromARGB(255, 255, 204, 229),
             items: [
               Icon(
                 Icons.home,
@@ -161,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Color.fromARGB(255, 255, 126, 188),
               ),
               child: Text(
-                'Drawer Header',
+                'Berry Happy',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -175,6 +178,16 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => NewsScreen()));
+              },
+            ),
+            ListTile(
+              //combination with list view to make items organized
+              title: const Text('Payment Screen'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PaymentWidget()));
               },
             ),
           ],
