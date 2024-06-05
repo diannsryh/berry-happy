@@ -295,3 +295,25 @@
 //     );
 //   }
 // }
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class AddMenu extends StatelessWidget {
+  const AddMenu({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 255, 204, 229),
+      ),
+      body: Center(
+        child: Text(
+          'This is the new page',
+          style: GoogleFonts.poppins(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}

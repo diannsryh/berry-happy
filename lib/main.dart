@@ -1,8 +1,10 @@
 import 'package:berry_happy/cart/cart_screen.dart';
 // import 'package:berry_happy/cart/payment_screen.dart';
 import 'package:berry_happy/dashboard/dashboard_consumer.dart';
+import 'package:berry_happy/dashboard/dashboard_owner.dart';
 import 'package:berry_happy/launch/launch_screen.dart';
 import 'package:berry_happy/login/main_login.dart';
+import 'package:berry_happy/menu/add_menu.dart';
 import 'package:berry_happy/profile/profile_consumer.dart';
 import 'package:berry_happy/setting/setting_screen.dart';
 import 'package:berry_happy/sign up/signup_screen.dart';
@@ -31,12 +33,14 @@ class MyApp extends StatelessWidget {
       home: const LaunchScreen(),
       routes: {
         '/dashboard-consumer': (context) => const DashboardConsumer(),
+        '/dashboard-owner': (context) => const DashboardOwner(),
         // '/payment': (context) => const PaymentScreen(),
         '/cart': (context) => const CartScreen(),
         '/main-login': (context) => const MainLogin(),
         '/signup-screen': (context) => const SignUp(),
         '/my-homepage': (context) => const MyHomePage(),
-        '/payment': (context) => const PaymentWidget()
+        '/payment': (context) => const PaymentWidget(),
+        '/add-menu': (context) => const AddMenu(),
       },
     );
   }
