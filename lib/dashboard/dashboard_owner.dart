@@ -1,3 +1,5 @@
+import 'package:berry_happy/dto/menu.dart';
+import 'package:berry_happy/endpoints/endpoints.dart';
 import 'package:berry_happy/menu/add_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +12,8 @@ class DashboardOwner extends StatefulWidget {
 }
 
 class _DashboardOwnerState extends State<DashboardOwner> {
+  Future<List<Menu>>? _menu;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,6 +121,73 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                   ],
                 ),
               ),
+              FutureBuilder<List<Menu>>(
+                  future: _menu,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final data = snapshot.data!;
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            final item = data[index];
+                            return ListTile(
+                              title: Column(children: [
+                                Text('Menu Name : ${item.menuName}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color:
+                                          const Color.fromARGB(255, 36, 31, 31),
+                                      fontWeight: FontWeight.normal,
+                                    )),
+                                Text('Deskripsi : ${item.descMenu}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color:
+                                          const Color.fromARGB(255, 36, 31, 31),
+                                      fontWeight: FontWeight.normal,
+                                    )),
+                                Text('Price: ${item.menuPrice}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color:
+                                          const Color.fromARGB(255, 36, 31, 31),
+                                      fontWeight: FontWeight.normal,
+                                    )),
+                              ]),
+                              subtitle: item.imageUrl != null
+                                  ? Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                fit: BoxFit.fitWidth,
+                                                width: 100,
+                                                Uri.parse(
+                                                        '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
+                                                    .toString(),
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    const Icon(Icons
+                                                        .error), // Display error icon if image fails to load
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  : null,
+                            );
+                          });
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('${snapshot.error}'));
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  })
             ],
           ),
         ),
@@ -130,8 +201,8 @@ class _DashboardOwnerState extends State<DashboardOwner> {
             MaterialPageRoute(builder: (context) => const AddMenu()),
           );
         },
+        backgroundColor: const Color.fromARGB(225, 223, 6, 112),
         child: const Icon(Icons.add),
-        backgroundColor: Color.fromARGB(255, 255, 204, 229),
       ),
     );
   }

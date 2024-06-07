@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> screens = [
     //a list of widget objects that represent the various screens available in the application.
-    const DashboardConsumer(), //index 0
+    const DashboardOwner(), //index 0
     const ConsumerProfile(), //index 1
     const SettingScreen(), //index 2
     const PaymentWidget(),
