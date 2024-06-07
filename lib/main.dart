@@ -194,6 +194,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder: (context) => const PaymentWidget()));
               },
             ),
+            ListTile(
+              //combination with list view to make items organized
+              title: const Text('Owner Screen'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DashboardOwner()));
+              },
+            ),
           ],
         )));
   }
