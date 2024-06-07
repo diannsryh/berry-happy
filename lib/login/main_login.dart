@@ -171,8 +171,8 @@ class _MainLoginState extends State<MainLogin> {
                   height: 50,
                   width: 250,
                   child: ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/my-homepage'),
+                      onPressed: () => Navigator.pushNamed(context,
+                          '/my-homepage'), //nanti buat navigasi untuk owner
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color.fromARGB(255, 255, 255, 255)),
