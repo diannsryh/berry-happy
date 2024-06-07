@@ -21,6 +21,73 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
     _menu = DataService.fetchMenu();
   }
 
+  void _showMenuDetails(Menu menu) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allow the modal to be scrollable
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (menu.imageUrl != null)
+                      Center(
+                        child: Image.network(
+                          Uri.parse(
+                                  '${Endpoints.urlUAS}/static/storages/${menu.imageUrl!}')
+                              .toString(),
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                    SizedBox(height: 10),
+                    Text(
+                      menu.menuName,
+                      style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Rp. ${menu.menuPrice}',
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      menu.descMenu,
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Implement add to cart functionality here
+                          Navigator.pop(context);
+                        },
+                        child: Text('Add to Cart'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -60,8 +127,7 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
 
             // Total Order Display Container
             Container(
-              padding:
-                  const EdgeInsets.only(top: 10, bottom: 10, left: 0, right: 0),
+              padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 255, 204, 229),
@@ -87,88 +153,98 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                 ],
               ),
             ),
-            
+
             // Menu List Container
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.all(0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: FutureBuilder<List<Menu>>(
-                  future: _menu,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final data = snapshot.data!;
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            final item = data[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${item.menuName}',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 20,
-                                              color: const Color.fromARGB(
-                                                  255, 36, 31, 31),
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Text('Rp. ${item.menuPrice}',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 16,
-                                              color: const Color.fromARGB(
-                                                  255, 36, 31, 31),
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Text('${item.descMenu}',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 14,
-                                              color: const Color.fromARGB(
-                                                  255, 36, 31, 31),
-                                              fontWeight: FontWeight.normal,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  if (item.imageUrl != null)
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 16.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                          Uri.parse(
-                                                  '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
-                                              .toString(),
-                                          errorBuilder:
-                                              (context, error, stackTrace) =>
-                                                  const Icon(Icons.error),
+                future: _menu,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final data = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final item = data[index];
+                        return InkWell(
+                          onTap: () => _showMenuDetails(item),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.menuName,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 20,
+                                          color: const Color.fromARGB(
+                                              255, 36, 31, 31),
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      Text(
+                                        'Rp. ${item.menuPrice}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          color: const Color.fromARGB(
+                                              255, 36, 31, 31),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        item.descMenu,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          color: const Color.fromARGB(
+                                              255, 36, 31, 31),
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (item.imageUrl != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                        Uri.parse(
+                                                '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
+                                            .toString(),
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(Icons.error),
+                                      ),
                                     ),
-                                ],
-                              ),
-                            );
-                          });
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('${snapshot.error}'));
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  }),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('${snapshot.error}'));
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
           ],
         ),
@@ -176,4 +252,3 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
     );
   }
 }
-
