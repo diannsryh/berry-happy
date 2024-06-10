@@ -129,7 +129,7 @@ class _AddMenuState extends State<AddMenu> {
         elevation: 0.0,
         iconTheme: const IconThemeData(color: Colors.white), // recolor the icon
       ),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

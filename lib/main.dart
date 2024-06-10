@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: activeIndex == 1 ? Colors.white : Constants.activeMenu,
               ),
               Icon(
-                Icons.settings,
+                Icons.payment,
                 size: 30.0,
                 color: activeIndex == 2 ? Colors.white : Constants.activeMenu,
               ),
