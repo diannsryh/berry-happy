@@ -40,7 +40,7 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                       Center(
                         child: Image.network(
                           Uri.parse(
-                                  '${Endpoints.urlUAS}/static/storages/${menu.imageUrl!}')
+                                  '${Endpoints.baseUAS}/static/storages/${menu.imageUrl!}')
                               .toString(),
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.error),
@@ -125,34 +125,34 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
 
             const Divider(color: Colors.white),
 
-            // Total Order Display Container
-            Container(
-              padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 204, 229),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        "Rp.69.000",
-                        style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      Text(
-                        "Total Order",
-                        style: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // // Total Order Display Container
+            // Container(
+            //   padding: const EdgeInsets.all(10),
+            //   margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            //   decoration: BoxDecoration(
+            //     color: const Color.fromARGB(255, 255, 204, 229),
+            //     borderRadius: BorderRadius.circular(20.0),
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Column(
+            //         children: [
+            //           Text(
+            //             "Rp.69.000",
+            //             style: GoogleFonts.poppins(
+            //                 fontWeight: FontWeight.bold, fontSize: 20),
+            //           ),
+            //           Text(
+            //             "Total Order",
+            //             style: GoogleFonts.poppins(
+            //                 fontSize: 16, fontWeight: FontWeight.normal),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             // Menu List Container
             Container(
@@ -225,7 +225,7 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                                         width: 100,
                                         height: 100,
                                         Uri.parse(
-                                                '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
+                                                '${Endpoints.baseUAS}/static/storages/${item.imageUrl!}')
                                             .toString(),
                                         errorBuilder:
                                             (context, error, stackTrace) =>

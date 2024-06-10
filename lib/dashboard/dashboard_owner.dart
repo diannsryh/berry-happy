@@ -103,30 +103,30 @@ class _DashboardOwnerState extends State<DashboardOwner> {
 
               const Divider(color: Colors.white),
 
-              // Total Order Display
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 5, bottom: 5, left: 65, right: 65),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "Rp.69.000",
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        Text(
-                          "Total Income",
-                          style: GoogleFonts.poppins(
-                              fontSize: 16, fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              // // Total Order Display
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       top: 5, bottom: 5, left: 65, right: 65),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Column(
+              //         children: [
+              //           Text(
+              //             "Rp.69.000",
+              //             style: GoogleFonts.poppins(
+              //                 fontWeight: FontWeight.bold, fontSize: 20),
+              //           ),
+              //           Text(
+              //             "Total Income",
+              //             style: GoogleFonts.poppins(
+              //                 fontSize: 16, fontWeight: FontWeight.normal),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
               // Menu List Container
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -192,7 +192,7 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                                             width: 100,
                                             height: 100,
                                             Uri.parse(
-                                                    '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
+                                                    '${Endpoints.baseUAS}/static/storages/${item.imageUrl!}')
                                                 .toString(),
                                             errorBuilder:
                                                 (context, error, stackTrace) =>

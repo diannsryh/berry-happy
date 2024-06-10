@@ -23,6 +23,8 @@ class _AddMenuState extends State<AddMenu> {
   // ignore: unused_field
   int _price = 0;
 
+  String? _selectedCategory; // Variable to hold the selected category
+
   File? galleryFile;
   final picker = ImagePicker();
 
@@ -68,10 +70,8 @@ class _AddMenuState extends State<AddMenu> {
         if (xfilePick != null) {
           galleryFile = File(pickedFile!.path);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
-              const SnackBar(
-                  content:
-                      Text('Nothing is selected'))); //jika batal mengupload
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Nothing is selected'))); //jika batal mengupload
         }
       },
     );
@@ -90,16 +90,17 @@ class _AddMenuState extends State<AddMenu> {
     debugPrint(_description);
   }
 
-//fungsi input
+  //fungsi input
   Future<void> _postDataWithImage(BuildContext context) async {
     if (galleryFile == null) {
       return; // Handle case where no image is selected
     }
 
-    var request = MultipartRequest('POST', Uri.parse(Endpoints.menu));
+    var request = MultipartRequest('POST', Uri.parse(Endpoints.menuCreate));
     request.fields['nama_menu'] = _titleController.text;
     request.fields['desc_menu'] = _descriptionController.text;
     request.fields['harga_menu'] = _priceController.text.toString();
+    request.fields['category'] = _selectedCategory!; // Add category field
 
     var multipartFile = await MultipartFile.fromPath(
       'image',
@@ -128,7 +129,6 @@ class _AddMenuState extends State<AddMenu> {
         elevation: 0.0,
         iconTheme: const IconThemeData(color: Colors.white), // recolor the icon
       ),
-      // ignore: sized_box_for_whitespace
       body: Container(
         width: double.infinity,
         child: Column(
@@ -267,16 +267,49 @@ class _AddMenuState extends State<AddMenu> {
                                         bottom: BorderSide(
                                             color: Colors.grey.shade200))),
                                 child: TextField(
-                                  controller: _descriptionController,
+                                  controller: _priceController,
                                   decoration: const InputDecoration(
                                       hintText: "Price",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
                                   onChanged: (value) {
                                     setState(() {
-                                      _price = value as int;
+                                      _price = int.tryParse(value) ?? 0;
                                     });
                                   },
+                                ),
+                              ),
+                              // category
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey.shade200))),
+                                child: DropdownButtonFormField<String>(
+                                  value: _selectedCategory,
+                                  icon: const Icon(Icons.arrow_downward),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    hintText: "Category",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedCategory = newValue;
+                                    });
+                                  },
+                                  items: <String>['Food', 'Beverage']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                             ],
@@ -292,7 +325,6 @@ class _AddMenuState extends State<AddMenu> {
           ],
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(225, 223, 6, 112),
         tooltip: 'Save',

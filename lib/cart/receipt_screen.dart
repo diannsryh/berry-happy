@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PaymentWidget extends StatelessWidget {
-  const PaymentWidget({super.key});
+class ReceiptScreen extends StatelessWidget {
+  const ReceiptScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

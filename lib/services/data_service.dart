@@ -31,7 +31,7 @@ class DataService {
   //   }
   // }
   static Future<List<Menu>> fetchMenu() async {
-    final response = await http.get(Uri.parse(Endpoints.menu));
+    final response = await http.get(Uri.parse(Endpoints.menuRead));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return (data['datas'] as List<dynamic>)

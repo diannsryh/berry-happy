@@ -6,13 +6,13 @@ import 'package:berry_happy/launch/launch_screen.dart';
 import 'package:berry_happy/login/main_login.dart';
 import 'package:berry_happy/menu/add_menu.dart';
 import 'package:berry_happy/profile/profile_consumer.dart';
-import 'package:berry_happy/setting/setting_screen.dart';
+import 'package:berry_happy/payment/payment_screen.dart';
 import 'package:berry_happy/sign up/signup_screen.dart';
 import 'package:berry_happy/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:berry_happy/cart/payment_screen.dart';
+import 'package:berry_happy/cart/receipt_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/main-login': (context) => const MainLogin(),
         '/signup-screen': (context) => const SignUp(),
         '/my-homepage': (context) => const MyHomePage(),
-        '/payment': (context) => const PaymentWidget(),
+        '/payment': (context) => const ReceiptScreen(),
         '/add-menu': (context) => const AddMenu(),
       },
     );
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const DashboardConsumer(), //index 0
     const ConsumerProfile(), //index 1
     const SettingScreen(), //index 2
-    const PaymentWidget(),
+    const ReceiptScreen(),
   ];
 
   // void _onItemTapped(int index) {//method called when user on tap item in navigation
@@ -186,12 +186,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               //combination with list view to make items organized
-              title: const Text('Payment Screen'),
+              title: const Text('Receipt Screen'),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PaymentWidget()));
+                        builder: (context) => const ReceiptScreen()));
               },
             ),
             ListTile(
