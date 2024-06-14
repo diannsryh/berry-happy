@@ -40,7 +40,7 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                       Center(
                         child: Image.network(
                           Uri.parse(
-                                  '${Endpoints.urlUAS}/static/storages/${menu.imageUrl!}')
+                                  '${Endpoints.baseUAS}/static/storages/${menu.imageUrl!}')
                               .toString(),
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.error),
@@ -225,7 +225,7 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                                         width: 100,
                                         height: 100,
                                         Uri.parse(
-                                                '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
+                                                '${Endpoints.baseUAS}/static/storages/${item.imageUrl!}')
                                             .toString(),
                                         errorBuilder:
                                             (context, error, stackTrace) =>

@@ -1,5 +1,13 @@
+import 'dart:convert';
+
 import 'package:berry_happy/components/assets_image_widget.dart';
+import 'package:berry_happy/cubit/cubit/auth_cubit.dart';
+import 'package:berry_happy/dto/login.dart';
+import 'package:berry_happy/services/data_service.dart';
+import 'package:berry_happy/utils/constants.dart';
+import 'package:berry_happy/utils/secure_storage_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    final authCubit = BlocProvider.of<AuthCubit>(context);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 204, 229),
       body: SafeArea(
@@ -41,7 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 50,
               width: 250,
               child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/main-login'),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/dashboard-owner'),
                   style: ElevatedButton.styleFrom(
                       backgroundColor:
                           const Color.fromARGB(255, 255, 255, 255)),

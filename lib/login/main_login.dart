@@ -1,8 +1,18 @@
 // import 'dart:convert';
 
+import 'dart:convert';
+
 import 'package:berry_happy/components/assets_image_widget.dart';
+import 'package:berry_happy/dashboard/dashboard_consumer.dart';
+import 'package:berry_happy/cubit/cubit/auth_cubit.dart';
+import 'package:berry_happy/dto/login.dart';
+import 'package:berry_happy/services/data_service.dart';
+import 'package:berry_happy/utils/constants.dart';
+import 'package:berry_happy/utils/secure_storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:my_course/cubit/auth/auth_cubit.dart';
 // import 'package:my_course/dto/login.dart';
@@ -19,6 +29,29 @@ class MainLogin extends StatefulWidget {
 }
 
 class _MainLoginState extends State<MainLogin> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void sendLogin(context, AuthCubit authCubit) async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    debugPrint(email);
+    debugPrint(password);
+    final response = await DataService.sendLoginData(email, password);
+    debugPrint(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      debugPrint("sending success");
+      final data = jsonDecode(response.body);
+      final loggedIn = Login.fromJson(data);
+      await SecureStorageUtil.storage
+          .write(key: tokenStoreName, value: loggedIn.accessToken);
+      authCubit.login(loggedIn.accessToken, loggedIn.idUser);
+      Navigator.pushReplacementNamed(context, "/dashboard-consumer");
+      debugPrint(loggedIn.accessToken);
+    } else {
+      debugPrint("failed not");
+    }
+  }
   // final _emailController = TextEditingController();
   // final _passwordController = TextEditingController();
 
@@ -44,7 +77,7 @@ class _MainLoginState extends State<MainLogin> {
 
   @override
   Widget build(BuildContext context) {
-    // final authCubit = BlocProvider.of<AuthCubit>(context);
+    final authCubit = BlocProvider.of<AuthCubit>(context);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 204, 229),
       body: SingleChildScrollView(
@@ -81,7 +114,7 @@ class _MainLoginState extends State<MainLogin> {
                   height: 20,
                 ),
                 TextField(
-                  // controller: _emailController,
+                  controller: _emailController,
                   style: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 16,
@@ -117,7 +150,7 @@ class _MainLoginState extends State<MainLogin> {
                   height: 16,
                 ),
                 TextField(
-                  // controller: _passwordController,
+                  controller: _passwordController,
                   style: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 16,
@@ -167,23 +200,27 @@ class _MainLoginState extends State<MainLogin> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Container(
+                SizedBox(
                   height: 50,
-                  width: 250,
                   child: ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/my-homepage'),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 255, 255, 255)),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 255, 65, 158),
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AutofillHints.addressCity),
-                      )),
+                    onPressed: () {
+                      sendLogin(context, authCubit);
+                      // Navigator.pushNamed(context, '/dashboard-customer');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Login Test',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

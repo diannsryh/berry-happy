@@ -5,30 +5,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:berry_happy/endpoints/endpoints.dart';
+import 'package:berry_happy/dto/menu.dart'; // Assuming you have a Menu model defined
 
-class AddMenu extends StatefulWidget {
-  const AddMenu({Key? key}) : super(key: key);
+class EditMenu extends StatefulWidget {
+  final Menu menu;
+
+  const EditMenu({required this.menu, Key? key}) : super(key: key);
 
   @override
-  _AddMenuState createState() => _AddMenuState();
+  _EditMenuState createState() => _EditMenuState();
 }
 
-class _AddMenuState extends State<AddMenu> {
-  final _titleController = TextEditingController();
-  String _title = "";
-
-  final _descriptionController = TextEditingController();
-  String _description = "";
-
-  final _priceController = TextEditingController();
-  int _price = 0;
-
+class _EditMenuState extends State<EditMenu> {
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _priceController;
   File? galleryFile;
   final picker = ImagePicker();
+  late String _selectedCategory;
 
-  String? _selectedCategory; // Change to nullable String
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.menu.menuName);
+    _descriptionController = TextEditingController(text: widget.menu.descMenu);
+    _priceController = TextEditingController(text: widget.menu.menuPrice.toString());
+    _selectedCategory = widget.menu.kategori;
+  }
 
-  _showPicker({required BuildContext context}) {
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _priceController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _showPicker({required BuildContext context}) async {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -58,7 +71,7 @@ class _AddMenuState extends State<AddMenu> {
     );
   }
 
-  Future getImage(ImageSource img) async {
+  Future<void> getImage(ImageSource img) async {
     final pickedFile = await picker.pickImage(source: img);
     setState(() {
       if (pickedFile != null) {
@@ -71,43 +84,25 @@ class _AddMenuState extends State<AddMenu> {
     });
   }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
-    _priceController.dispose();
-    super.dispose();
-  }
-
-  saveData() {
-    debugPrint(_title);
-    debugPrint(_description);
-  }
-
-  Future<void> _postDataWithImage(BuildContext context) async {
-    if (galleryFile == null) {
-      return;
-    }
-
-    var request =
-        http.MultipartRequest('POST', Uri.parse(Endpoints.menuCreate));
+  Future<void> _updateDataWithImage(BuildContext context) async {
+    var request = http.MultipartRequest('PUT', Uri.parse('${Endpoints.baseUAS}/menu/update'));
+    request.fields['id_menu'] = widget.menu.idMenu.toString();
     request.fields['nama_menu'] = _titleController.text;
     request.fields['desc_menu'] = _descriptionController.text;
     request.fields['harga_menu'] = _priceController.text;
-    request.fields['kategori'] = _selectedCategory!; // Add category field
+    request.fields['kategori'] = _selectedCategory;
 
-    var multipartFile = await http.MultipartFile.fromPath(
-      'img',
-      galleryFile!.path,
-    );
-    request.files.add(multipartFile);
+    if (galleryFile != null) {
+      var multipartFile = await http.MultipartFile.fromPath('img', galleryFile!.path);
+      request.files.add(multipartFile);
+    }
 
     var response = await request.send();
-    if (response.statusCode == 201) {
-      debugPrint('Menu posted successfully!');
+    if (response.statusCode == 200) {
+      debugPrint('Menu updated successfully!');
       Navigator.pushReplacementNamed(context, '/dashboard-owner');
     } else {
-      debugPrint('Error posting issue: ${response.statusCode}');
+      debugPrint('Error updating menu: ${response.statusCode}');
     }
   }
 
@@ -131,7 +126,7 @@ class _AddMenuState extends State<AddMenu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Add Menu",
+                    "Edit Menu",
                     style: GoogleFonts.poppins(
                       fontSize: 32,
                       color: const Color.fromARGB(225, 223, 6, 112),
@@ -140,7 +135,7 @@ class _AddMenuState extends State<AddMenu> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    "Fill the form below to add menu!",
+                    "Fill the form below to update the menu!",
                     style: GoogleFonts.poppins(
                       fontSize: 12,
                       color: Colors.black,
@@ -159,8 +154,7 @@ class _AddMenuState extends State<AddMenu> {
                     borderRadius: BorderRadius.all(Radius.circular(60)),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     child: Column(
                       children: [
                         const SizedBox(height: 20),
@@ -178,47 +172,41 @@ class _AddMenuState extends State<AddMenu> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200),
+                                      bottom: BorderSide(color: Colors.grey.shade200),
                                     ),
                                   ),
                                   width: double.infinity,
                                   height: 150,
                                   child: galleryFile == null
-                                      ? Center(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons
-                                                    .add_photo_alternate_outlined,
-                                                color: Colors.grey,
-                                                size: 50,
+                                      ? (widget.menu.imageUrl != null && widget.menu.imageUrl!.isNotEmpty
+                                          ? Image.network(widget.menu.imageUrl!)
+                                          : Center(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.add_photo_alternate_outlined,
+                                                    color: Colors.grey,
+                                                    size: 50,
+                                                  ),
+                                                  Text(
+                                                    'Pick your Image here',
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      color: const Color.fromARGB(255, 124, 122, 122),
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              Text(
-                                                'Pick your Image here',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 14,
-                                                  color: const Color.fromARGB(
-                                                      255, 124, 122, 122),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Center(
-                                          child: Image.file(galleryFile!),
-                                        ),
+                                            ))
+                                      : Center(child: Image.file(galleryFile!)),
                                 ),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200)),
+                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
                                 ),
                                 child: TextField(
                                   controller: _titleController,
@@ -229,7 +217,7 @@ class _AddMenuState extends State<AddMenu> {
                                   ),
                                   onChanged: (value) {
                                     setState(() {
-                                      _title = value;
+                                      // _title = value; // This line is not necessary
                                     });
                                   },
                                 ),
@@ -237,9 +225,7 @@ class _AddMenuState extends State<AddMenu> {
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200)),
+                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
                                 ),
                                 child: TextField(
                                   controller: _descriptionController,
@@ -250,7 +236,7 @@ class _AddMenuState extends State<AddMenu> {
                                   ),
                                   onChanged: (value) {
                                     setState(() {
-                                      _description = value;
+                                      // _description = value; // This line is not necessary
                                     });
                                   },
                                 ),
@@ -258,9 +244,7 @@ class _AddMenuState extends State<AddMenu> {
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200)),
+                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
                                 ),
                                 child: TextField(
                                   controller: _priceController,
@@ -272,7 +256,7 @@ class _AddMenuState extends State<AddMenu> {
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
                                     setState(() {
-                                      _price = int.tryParse(value) ?? 0;
+                                      // _price = int.tryParse(value) ?? 0; // This line is not necessary
                                     });
                                   },
                                 ),
@@ -280,9 +264,7 @@ class _AddMenuState extends State<AddMenu> {
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200)),
+                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
                                 ),
                                 child: DropdownButtonFormField<String>(
                                   value: _selectedCategory,
@@ -302,8 +284,6 @@ class _AddMenuState extends State<AddMenu> {
                                     hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none,
                                   ),
-                                  hint: const Text(
-                                      "Select a Category"), // Add hint
                                 ),
                               ),
                             ],
@@ -323,8 +303,7 @@ class _AddMenuState extends State<AddMenu> {
         backgroundColor: const Color.fromARGB(225, 223, 6, 112),
         tooltip: 'Save',
         onPressed: () {
-          _postDataWithImage(context);
-          Navigator.pop(context, true);
+          _updateDataWithImage(context);
         },
         child: const Icon(Icons.save, color: Colors.white, size: 28),
       ),

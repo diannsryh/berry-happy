@@ -1,6 +1,7 @@
 import 'package:berry_happy/dto/menu.dart';
 import 'package:berry_happy/endpoints/endpoints.dart';
 import 'package:berry_happy/menu/add_menu.dart';
+import 'package:berry_happy/menu/edit_menu.dart'; // Import the EditMenu page
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:berry_happy/services/data_service.dart';
@@ -14,6 +15,7 @@ class DashboardOwner extends StatefulWidget {
 
 class _DashboardOwnerState extends State<DashboardOwner> {
   Future<List<Menu>>? _menu;
+
   @override
   void initState() {
     super.initState();
@@ -142,7 +144,7 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                         final data = snapshot.data!;
                         return ListView.builder(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: data.length,
                             itemBuilder: (context, index) {
                               final item = data[index];
@@ -192,7 +194,7 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                                             width: 100,
                                             height: 100,
                                             Uri.parse(
-                                                    '${Endpoints.urlUAS}/static/storages/${item.imageUrl!}')
+                                                    '${Endpoints.baseUAS}/static/storages/${item.imageUrl!}')
                                                 .toString(),
                                             errorBuilder:
                                                 (context, error, stackTrace) =>
@@ -200,6 +202,25 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                                           ),
                                         ),
                                       ),
+                                    Column(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit,
+                                              color: Colors.blue),
+                                          onPressed: () {
+                                            _editMenu(item);
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete,
+                                              color: Colors.red),
+                                          onPressed: () {
+                                            // Handle delete action
+                                            _deleteMenu(item.idMenu);
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               );
@@ -217,15 +238,45 @@ class _DashboardOwnerState extends State<DashboardOwner> {
 
       // Floating Action Button
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddMenu()),
           );
+          if (result == true) {
+            setState(() {
+              _menu = DataService.fetchMenu();
+            });
+          }
         },
         backgroundColor: const Color.fromARGB(225, 223, 6, 112),
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _editMenu(Menu menu) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditMenu(menu: menu)),
+    );
+    if (result == true) {
+      setState(() {
+        _menu = DataService.fetchMenu();
+      });
+    }
+  }
+
+  void _deleteMenu(int menuId) async {
+    final success = await DataService.deleteMenu(menuId);
+    if (success) {
+      setState(() {
+        _menu = DataService.fetchMenu();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete menu')),
+      );
+    }
   }
 }
