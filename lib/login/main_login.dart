@@ -203,7 +203,6 @@ class _MainLoginState extends State<MainLogin> {
                 SizedBox(
                   height: 50,
                   child: ElevatedButton(
-<<<<<<< HEAD
                     onPressed: () {
                       sendLogin(context, authCubit);
                       // Navigator.pushNamed(context, '/dashboard-customer');
@@ -222,21 +221,6 @@ class _MainLoginState extends State<MainLogin> {
                       ),
                     ),
                   ),
-=======
-                      onPressed: () => Navigator.pushNamed(context,
-                          '/my-homepage'), //nanti buat navigasi untuk owner
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 255, 255, 255)),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 255, 65, 158),
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AutofillHints.addressCity),
-                      )),
->>>>>>> 30ff27caed21af6111797283701002ce81f18f54
                 ),
               ],
             ),

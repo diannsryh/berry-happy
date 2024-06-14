@@ -85,7 +85,8 @@ class _EditMenuState extends State<EditMenu> {
   }
 
   Future<void> _updateDataWithImage(BuildContext context) async {
-    var request = http.MultipartRequest('PUT', Uri.parse('${Endpoints.baseUAS}/menu/update'));
+  try {
+    var request = http.MultipartRequest('POST', Uri.parse('${Endpoints.menuUpdate}/${widget.menu.idMenu}'));
     request.fields['id_menu'] = widget.menu.idMenu.toString();
     request.fields['nama_menu'] = _titleController.text;
     request.fields['desc_menu'] = _descriptionController.text;
@@ -97,14 +98,32 @@ class _EditMenuState extends State<EditMenu> {
       request.files.add(multipartFile);
     }
 
+    // Debug prints to verify request details
+    debugPrint('Request URL: ${request.url}');
+    debugPrint('Request Fields: ${request.fields}');
+    debugPrint('Request Files: ${request.files}');
+
     var response = await request.send();
     if (response.statusCode == 200) {
       debugPrint('Menu updated successfully!');
       Navigator.pushReplacementNamed(context, '/dashboard-owner');
     } else {
       debugPrint('Error updating menu: ${response.statusCode}');
+      var responseBody = await response.stream.bytesToString();
+      debugPrint('Response body: $responseBody');
+    }
+  } catch (e) {
+    if (e is http.ClientException) {
+      debugPrint('ClientException: ${e.message}');
+    } else if (e is SocketException) {
+      debugPrint('SocketException: ${e.message}');
+    } else {
+      debugPrint('Exception: ${e.toString()}');
     }
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {

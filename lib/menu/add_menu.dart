@@ -26,7 +26,7 @@ class _AddMenuState extends State<AddMenu> {
   File? galleryFile;
   final picker = ImagePicker();
 
-  String? _selectedCategory; // Change to nullable String
+  String? _selectedCategory;
 
   _showPicker({required BuildContext context}) {
     showModalBottomSheet(
@@ -85,29 +85,51 @@ class _AddMenuState extends State<AddMenu> {
   }
 
   Future<void> _postDataWithImage(BuildContext context) async {
+    // Check if the image file is selected
     if (galleryFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image')),
+      );
       return;
     }
 
-    var request =
-        http.MultipartRequest('POST', Uri.parse(Endpoints.menuCreate));
-    request.fields['nama_menu'] = _titleController.text;
-    request.fields['desc_menu'] = _descriptionController.text;
-    request.fields['harga_menu'] = _priceController.text;
-    request.fields['kategori'] = _selectedCategory!; // Add category field
+    // Check if the category is selected
+    if (_selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a category')),
+      );
+      return;
+    }
 
-    var multipartFile = await http.MultipartFile.fromPath(
-      'img',
-      galleryFile!.path,
-    );
-    request.files.add(multipartFile);
+    try {
+      var request =
+          http.MultipartRequest('POST', Uri.parse(Endpoints.menuCreate));
+      request.fields['nama_menu'] = _titleController.text;
+      request.fields['desc_menu'] = _descriptionController.text;
+      request.fields['harga_menu'] = _priceController.text;
+      request.fields['kategori'] = _selectedCategory!;
 
-    var response = await request.send();
-    if (response.statusCode == 201) {
-      debugPrint('Menu posted successfully!');
-      Navigator.pushReplacementNamed(context, '/dashboard-owner');
-    } else {
-      debugPrint('Error posting issue: ${response.statusCode}');
+      var multipartFile = await http.MultipartFile.fromPath(
+        'img',
+        galleryFile!.path,
+      );
+      request.files.add(multipartFile);
+
+      var response = await request.send();
+      if (response.statusCode == 201) {
+        debugPrint('Menu posted successfully!');
+        Navigator.pushReplacementNamed(context, '/dashboard-owner');
+      } else {
+        debugPrint('Error posting issue: ${response.statusCode}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error posting menu: ${response.statusCode}')),
+        );
+      }
+    } catch (e) {
+      debugPrint('Exception: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
     }
   }
 
@@ -302,8 +324,7 @@ class _AddMenuState extends State<AddMenu> {
                                     hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none,
                                   ),
-                                  hint: const Text(
-                                      "Select a Category"), // Add hint
+                                  hint: const Text("Select a Category"),
                                 ),
                               ),
                             ],
@@ -324,7 +345,6 @@ class _AddMenuState extends State<AddMenu> {
         tooltip: 'Save',
         onPressed: () {
           _postDataWithImage(context);
-          Navigator.pop(context, true);
         },
         child: const Icon(Icons.save, color: Colors.white, size: 28),
       ),
