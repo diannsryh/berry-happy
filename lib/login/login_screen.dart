@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:berry_happy/components/assets_image_widget.dart';
 import 'package:berry_happy/cubit/cubit/auth_cubit.dart';
 import 'package:berry_happy/dto/login.dart';
@@ -51,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: 250,
               child: ElevatedButton(
                   onPressed: () =>
-                      Navigator.pushNamed(context, '/dashboard-owner'),
+                      Navigator.pushNamed(context, '/main-login'),
                   style: ElevatedButton.styleFrom(
                       backgroundColor:
                           const Color.fromARGB(255, 255, 255, 255)),

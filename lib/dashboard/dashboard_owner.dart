@@ -1,3 +1,4 @@
+import 'package:berry_happy/components/customsearch.dart';
 import 'package:berry_happy/dto/menu.dart';
 import 'package:berry_happy/endpoints/endpoints.dart';
 import 'package:berry_happy/menu/add_menu.dart';
@@ -15,11 +16,36 @@ class DashboardOwner extends StatefulWidget {
 
 class _DashboardOwnerState extends State<DashboardOwner> {
   Future<List<Menu>>? _menu;
+  late TextEditingController _searchController;
+  int currentPage = 1;
 
   @override
   void initState() {
     super.initState();
-    _menu = DataService.fetchMenu();
+    _searchController = TextEditingController();
+    _fetchData(currentPage);
+  }
+
+  void _fetchData(int page) {
+    setState(() {
+      _menu = DataService.fetchMenu1(currentPage, _searchController.text);
+    });
+  }
+
+  void _incrementPage() {
+    setState(() {
+      currentPage++;
+      _fetchData(currentPage);
+    });
+  }
+
+  void _decrementPage() {
+    if (currentPage > 1) {
+      setState(() {
+        currentPage--;
+        _fetchData(currentPage);
+      });
+    }
   }
 
   @override
@@ -30,39 +56,46 @@ class _DashboardOwnerState extends State<DashboardOwner> {
           color: const Color.fromARGB(255, 255, 204, 229),
           child: Column(
             children: [
-              const SizedBox(height: 100),
-              const Divider(color: Colors.white),
-
-              // Search Bar
+              const SizedBox(height: 50),
+              // const Divider(color: Colors.white),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: Container(
-                  height: 55.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      fillColor: const Color.fromARGB(255, 224, 224, 224),
-                      hintText: 'Search...',
-                      hintStyle: GoogleFonts.poppins(fontSize: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 122, 122, 122)),
-                      ),
-                      prefixIcon: const Icon(Icons.search, size: 35),
-                    ),
-                  ),
-                ),
+                padding: const EdgeInsets.all(8.0),
+                child: CustomSearchBox(
+                    controller: _searchController,
+                    onChanged: (value) => _fetchData(currentPage),
+                    onClear: (value) => _fetchData(currentPage),
+                    hintText: 'search'),
               ),
+              // Search Bar
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 18),
+              //   child: Container(
+              //     height: 55.0,
+              //     decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.circular(30.0),
+              //     ),
+              //     child: TextField(
+              //       decoration: InputDecoration(
+              //         fillColor: const Color.fromARGB(255, 224, 224, 224),
+              //         hintText: 'Search...',
+              //         hintStyle: GoogleFonts.poppins(fontSize: 16),
+              //         border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(30),
+              //           borderSide: const BorderSide(
+              //               color: Color.fromARGB(255, 122, 122, 122)),
+              //         ),
+              //         prefixIcon: const Icon(Icons.search, size: 35),
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               const Divider(color: Colors.white),
 
               // Profile, Restaurant Name, and Rating
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
                   padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
@@ -102,40 +135,40 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                   ),
                 ),
               ),
+              const SizedBox(height: 30),
+              // const Divider(color: Colors.white),
 
-              const Divider(color: Colors.white),
-
-              // Total Order Display
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 5, bottom: 5, left: 65, right: 65),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "Rp.69.000",
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        Text(
-                          "Total Income",
-                          style: GoogleFonts.poppins(
-                              fontSize: 16, fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              // // Total Order Display
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       top: 5, bottom: 5, left: 65, right: 65),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Column(
+              //         children: [
+              //           Text(
+              //             "Rp.69.000",
+              //             style: GoogleFonts.poppins(
+              //                 fontWeight: FontWeight.bold, fontSize: 20),
+              //           ),
+              //           Text(
+              //             "Total Income",
+              //             style: GoogleFonts.poppins(
+              //                 fontSize: 16, fontWeight: FontWeight.normal),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
               // Menu List Container
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
                 child: FutureBuilder<List<Menu>>(
                     future: _menu,
@@ -149,7 +182,7 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                             itemBuilder: (context, index) {
                               final item = data[index];
                               return Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.all(20.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -230,6 +263,35 @@ class _DashboardOwnerState extends State<DashboardOwner> {
                       }
                       return const Center(child: CircularProgressIndicator());
                     }),
+              ),
+
+              // Increment and Decrement Page Buttons
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          iconColor: Color.fromARGB(255, 255, 204, 229)),
+                      onPressed: _decrementPage,
+                      child: Text(
+                        "Previous Page",
+                        style: GoogleFonts.poppins(fontSize: 16),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          iconColor: Color.fromARGB(255, 255, 204, 229)),
+                      onPressed: _incrementPage,
+                      child: Text(
+                        "Next Page",
+                        style: GoogleFonts.poppins(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

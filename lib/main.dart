@@ -9,7 +9,7 @@ import 'package:berry_happy/menu/add_menu.dart';
 import 'package:berry_happy/menu/edit_menu.dart';
 import 'package:berry_happy/navigation/navigation.dart';
 import 'package:berry_happy/profile/profile_consumer.dart';
-import 'package:berry_happy/setting/setting_screen.dart';
+import 'package:berry_happy/payment/payment_screen.dart';
 import 'package:berry_happy/sign up/signup_screen.dart';
 import 'package:berry_happy/utils/auth_wrapper.dart';
 import 'package:berry_happy/utils/constants.dart';
@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:berry_happy/cart/payment_screen.dart';
+import 'package:berry_happy/cart/receipt_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,29 +28,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [BlocProvider<AuthCubit>(create: (context) => AuthCubit())],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const LaunchScreen(),
-        routes: {
-          '/dashboard-owner': (context) => const DashboardOwner(),
-          // '/payment': (context) => const PaymentScreen(),
-          '/cart': (context) => const CartScreen(),
-          '/main-login': (context) => const MainLogin(),
-          '/signup-screen': (context) => const SignUp(),
-          '/my-homepage': (context) => const MyHomePage(),
-          '/payment': (context) => const PaymentWidget(),
-          '/add-menu': (context) => const AddMenu(),
-          // '/dashboard-consumer': (context) =>
-          //     const AuthWrapper(child: DashboardConsumer()),
-        },
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
+      home: const LaunchScreen(),
+      routes: {
+        '/dashboard-consumer': (context) => const DashboardConsumer(),
+        '/dashboard-owner': (context) => const DashboardOwner(),
+        // '/payment': (context) => const PaymentScreen(),
+        '/cart': (context) => const CartScreen(),
+        '/main-login': (context) => const MainLogin(),
+        '/signup-screen': (context) => const SignUp(),
+        '/my-homepage': (context) => const MyHomePage(),
+        '/payment': (context) => const PaymentWidget(),
+        '/add-menu': (context) => const AddMenu(),
+      },
     );
   }
 }
@@ -73,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const DashboardConsumer(), //index 0
     const ConsumerProfile(), //index 1
     const SettingScreen(), //index 2
-    // const PaymentWidget(),
+    const PaymentWidget(),
   ];
 
   // void _onItemTapped(int index) {//method called when user on tap item in navigation
@@ -157,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: activeIndex == 1 ? Colors.white : Constants.activeMenu,
               ),
               Icon(
-                Icons.settings,
+                Icons.payment,
                 size: 30.0,
                 color: activeIndex == 2 ? Colors.white : Constants.activeMenu,
               ),
@@ -195,12 +191,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               //combination with list view to make items organized
-              title: const Text('Payment Screen'),
+              title: const Text('Receipt Screen'),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PaymentWidget()));
+                        builder: (context) => const ReceiptScreen()));
               },
             ),
             ListTile(

@@ -1,7 +1,9 @@
+import 'package:berry_happy/cart/cart_screen.dart';
+import 'package:berry_happy/components/customsearch.dart';
+import 'package:berry_happy/dashboard/dashboard_owner.dart';
 import 'package:berry_happy/dto/menu.dart';
 import 'package:berry_happy/endpoints/endpoints.dart';
 import 'package:berry_happy/services/data_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,17 +16,48 @@ class DashboardConsumer extends StatefulWidget {
 
 class _DashboardConsumerState extends State<DashboardConsumer> {
   Future<List<Menu>>? _menu;
+  late TextEditingController _searchController;
+  int currentPage = 1;
 
   @override
   void initState() {
     super.initState();
-    _menu = DataService.fetchMenu();
+    _searchController = TextEditingController();
+    _fetchData(currentPage);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _fetchData(int page) {
+    setState(() {
+      _menu = DataService.fetchMenu1(currentPage, _searchController.text);
+    });
+  }
+
+  void _incrementPage() {
+    setState(() {
+      currentPage++;
+      _fetchData(currentPage);
+    });
+  }
+
+  void _decrementPage() {
+    if (currentPage > 1) {
+      setState(() {
+        currentPage--;
+        _fetchData(currentPage);
+      });
+    }
   }
 
   void _showMenuDetails(Menu menu) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Allow the modal to be scrollable
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           expand: false,
@@ -46,7 +79,7 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                               const Icon(Icons.error),
                         ),
                       ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       menu.menuName,
                       style: GoogleFonts.poppins(
@@ -61,14 +94,14 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       menu.descMenu,
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
@@ -88,36 +121,43 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
     );
   }
 
+  void _navigateToCart() {
+    // Implement navigation to cart page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              CartScreen()), // Replace with your cart page widget
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        color: const Color.fromARGB(255, 255, 204, 229),
-        child: Column(
-          children: [
-            const SizedBox(height: 100),
-            const Divider(color: Colors.white),
-
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Container(
-                height: 55.0,
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 255, 204, 229),
+          title: Text('Berry Happy'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: _navigateToCart,
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30.0),
+                  color: Color.fromARGB(255, 255, 204, 229),
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    fillColor: const Color.fromARGB(255, 224, 224, 224),
-                    hintText: 'Search...',
-                    hintStyle: GoogleFonts.poppins(fontSize: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 122, 122, 122)),
-                    ),
-                    prefixIcon: const Icon(Icons.search, size: 35),
+                child: Text(
+                  'Berry Happy',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
                   ),
                 ),
               ),
@@ -125,34 +165,34 @@ class _DashboardConsumerState extends State<DashboardConsumer> {
 
             const Divider(color: Colors.white),
 
-            // Total Order Display Container
-            Container(
-              padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 204, 229),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        "Rp.69.000",
-                        style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      Text(
-                        "Total Order",
-                        style: GoogleFonts.poppins(
-                            fontSize: 16, fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // // Total Order Display Container
+            // Container(
+            //   padding: const EdgeInsets.all(10),
+            //   margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            //   decoration: BoxDecoration(
+            //     color: const Color.fromARGB(255, 255, 204, 229),
+            //     borderRadius: BorderRadius.circular(20.0),
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Column(
+            //         children: [
+            //           Text(
+            //             "Rp.69.000",
+            //             style: GoogleFonts.poppins(
+            //                 fontWeight: FontWeight.bold, fontSize: 20),
+            //           ),
+            //           Text(
+            //             "Total Order",
+            //             style: GoogleFonts.poppins(
+            //                 fontSize: 16, fontWeight: FontWeight.normal),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             // Menu List Container
             Container(
