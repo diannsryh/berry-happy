@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const LaunchScreen(),
         routes: {
-          '/dashboard-owner': (context) => const DashboardOwner(),
+          // '/dashboard-owner': (context) => const DashboardOwner(),
           // '/payment': (context) => const PaymentScreen(),
           '/cart': (context) => const CartScreen(),
           '/main-login': (context) => const MainLogin(),
@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
           '/my-homepage': (context) => const MyHomePage(),
           '/payment': (context) => const PaymentWidget(),
           '/add-menu': (context) => const AddMenu(),
-          // '/dashboard-consumer': (context) =>
-          //     const AuthWrapper(child: DashboardConsumer()),
+          '/dashboard-consumer': (context) =>
+              AuthWrapper(child: DashboardConsumer()),
         },
       ),
     );
