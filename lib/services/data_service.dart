@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:berry_happy/dto/balances.dart';
 import 'package:berry_happy/dto/menu.dart';
 import 'package:berry_happy/endpoints/endpoints.dart';
 import 'package:flutter/material.dart';
@@ -72,3 +73,40 @@ class DataService {
     return response;
   }
 }
+
+// //balances & Spending belum selesai karena belum ada endpoints
+// static Future<List<Balances>> fetchBalances() async {
+//     final response = await http.get(Uri.parse(Endpoints.balances));
+//     if (response.statusCode == 200) {
+//       final data = jsonDecode(response.body) as Map<String, dynamic>;
+//       return (data['datas'] as List<dynamic>)
+//           .map((item) => Balances.fromJson(item as Map<String, dynamic>))
+//           .toList();
+//     } else {
+//       throw Exception('Failed o load data');
+//     }
+//   }
+
+//   static Future<List<Spending>> fetchSpendings() async {
+//     final response = await http.get(Uri.parse(Endpoints.spending));
+//     if (response.statusCode == 200) {
+//       final data = jsonDecode(response.body) as Map<String, dynamic>;
+//       return (data['datas'] as List<dynamic>)
+//           .map((item) => Spending.fromJson(item as Map<String, dynamic>))
+//           .toList();
+//     } else {
+//       throw Exception('Failed o load data');
+//     }
+//   }
+
+//   static Future<http.Response> sendSpendingData(int spending) async {
+//     final url = Uri.parse(Endpoints.spending);
+//     final data = {'spending': spending};
+
+//     final response = await http.post(
+//       url,
+//       headers: {'Content-Type': 'application/json'},
+//       body: jsonEncode(data),
+//     );
+//     return response;
+//   }
