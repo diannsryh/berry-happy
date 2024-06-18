@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:berry_happy/dto/menu.dart';
 import 'package:berry_happy/endpoints/endpoints.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class DataService {
@@ -41,5 +42,33 @@ class DataService {
       // Handle error
       throw Exception('Failed to load data ${response.statusCode}');
     }
+  }
+
+  static Future<bool> deleteMenu(int menuId) async {
+    final response = await http.delete(
+      Uri.parse('${Endpoints.menuDelete}/$menuId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    return response.statusCode == 200;
+  }
+
+  //post login with email and password
+  static Future<http.Response> sendLoginData(
+      String email, String password) async {
+    final url = Uri.parse(Endpoints.login);
+    debugPrint("$email test");
+    debugPrint("$password test");
+
+    final data = {'username_user': email, 'pass_user': password};
+
+    final response = await http.post(
+      url,
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    return response;
   }
 }

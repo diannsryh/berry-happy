@@ -1,65 +1,22 @@
-import 'package:berry_happy/cart/cart_screen.dart';
-import 'package:berry_happy/cubit/cubit/auth_cubit.dart';
-// import 'package:berry_happy/cart/payment_screen.dart';
 import 'package:berry_happy/dashboard/dashboard_consumer.dart';
 import 'package:berry_happy/dashboard/dashboard_owner.dart';
-import 'package:berry_happy/launch/launch_screen.dart';
-import 'package:berry_happy/login/main_login.dart';
-import 'package:berry_happy/menu/add_menu.dart';
-import 'package:berry_happy/menu/edit_menu.dart';
-import 'package:berry_happy/navigation/navigation.dart';
 import 'package:berry_happy/profile/profile_consumer.dart';
-import 'package:berry_happy/payment/payment_screen.dart';
-import 'package:berry_happy/sign up/signup_screen.dart';
-import 'package:berry_happy/utils/auth_wrapper.dart';
+import 'package:berry_happy/setting/setting_screen.dart';
 import 'package:berry_happy/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:berry_happy/cart/receipt_screen.dart';
+import 'package:berry_happy/cart/payment_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const LaunchScreen(),
-      routes: {
-        '/dashboard-consumer': (context) => const DashboardConsumer(),
-        '/dashboard-owner': (context) => const DashboardOwner(),
-        // '/payment': (context) => const PaymentScreen(),
-        '/cart': (context) => const CartScreen(),
-        '/main-login': (context) => const MainLogin(),
-        '/signup-screen': (context) => const SignUp(),
-        '/my-homepage': (context) => const MyHomePage(),
-        '/payment': (context) => const PaymentWidget(),
-        '/add-menu': (context) => const AddMenu(),
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyHomePage2 extends StatefulWidget {
+  const MyHomePage2({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePage2State createState() => _MyHomePage2State();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePage2State extends State<MyHomePage2> {
   int activeIndex =
       0; //var use to save active screen index, initialize by 0 meanns that the fisrt screen in list  screens is set as default.
   // int _selectedIndex = 0;
@@ -99,40 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                       )),
                   const SizedBox(width: 95),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/cart');
-                    },
-                    child: Stack(children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: Icon(Icons.shopping_cart, color: Colors.black),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: const Text(
-                            '3',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
                 ],
               ),
             )),
@@ -153,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: activeIndex == 1 ? Colors.white : Constants.activeMenu,
               ),
               Icon(
-                Icons.payment,
+                Icons.settings,
                 size: 30.0,
                 color: activeIndex == 2 ? Colors.white : Constants.activeMenu,
               ),
@@ -191,12 +114,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               //combination with list view to make items organized
-              title: const Text('Receipt Screen'),
+              title: const Text('Payment Screen'),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ReceiptScreen()));
+                        builder: (context) => const PaymentWidget()));
               },
             ),
             ListTile(
