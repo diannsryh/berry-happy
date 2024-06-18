@@ -4,7 +4,7 @@ class Menu {
   final String descMenu;
   final int menuPrice;
   final String kategori;
-  final String imageUrl;
+  final String? imageUrl;
    // Menambahkan properti kategori
 
   Menu({
@@ -13,7 +13,7 @@ class Menu {
     required this.descMenu,
     required this.menuPrice,
     required this.kategori, // Menambahkan kategori ke konstruktor
-    required this.imageUrl,
+    this.imageUrl,
   });
 
   factory Menu.fromJson(Map<String, dynamic> json) => Menu(
@@ -22,6 +22,6 @@ class Menu {
         descMenu: json['desc_menu'] as String,
         menuPrice: json['harga_menu'] as int,
         kategori: json['kategori'] as String, // Parsing kategori dari JSON
-        imageUrl: json['img'] as String,
+        imageUrl: json['img'] as String?,
       );
 }

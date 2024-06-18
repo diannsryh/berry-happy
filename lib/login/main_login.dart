@@ -67,8 +67,8 @@ class _MainLoginState extends State<MainLogin> {
   //     await SecureStorageUtil.storage
   //         .write(key: tokenStoreName, value: loggedIn.accessToken);
 
-  //     authCubit.login(loggedIn.accessToken, loggedIn.idUser);
-  //     Navigator.pushReplacementNamed(context, "/dashboard-owner");
+  //     authCubit.login(loggedIn.accessToken);
+  //     Navigator.pushReplacementNamed(context, "/balance-screen");
   //     debugPrint(loggedIn.accessToken);
   //   } else {
   //     debugPrint("failed");
@@ -133,7 +133,7 @@ class _MainLoginState extends State<MainLogin> {
                           width: 1.0, color: Color.fromARGB(255, 102, 7, 128)),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    hintText: 'Username',
+                    hintText: 'Email',
                     hintStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 16,
@@ -160,6 +160,13 @@ class _MainLoginState extends State<MainLogin> {
                   textInputAction: TextInputAction.done,
                   obscureText: true,
                   decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                        onPressed: () {}, icon: Icon(Icons.visibility)),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          width: 1.0, color: Color.fromARGB(255, 102, 7, 128)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
                           width: 1.0, color: Color.fromARGB(255, 102, 7, 128)),
@@ -171,28 +178,43 @@ class _MainLoginState extends State<MainLogin> {
                       fontSize: 16,
                       color: Color.fromARGB(255, 110, 110, 110),
                     ),
-                    fillColor: Colors.white,
-                    filled: true,
+                    fillColor:
+                        Colors.white, // Set the background color to white
+                    filled: true, // Enable filling the background color
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                 ),
-
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 20),
                 SizedBox(
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       sendLogin(context, authCubit);
+                      // Navigator.pushNamed(context, '/dashboard-customer');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 255, 65, 158),
+                      backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     child: Text(
-                      'Login',
+                      'Login Test',
                       style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 18,

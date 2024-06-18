@@ -12,8 +12,8 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 204, 229),
-        title: const Row(
+        backgroundColor: Color.fromARGB(255, 255, 204, 229),
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
@@ -24,7 +24,7 @@ class _CartScreenState extends State<CartScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: Icon(Icons.delete),
             onPressed: () {
               //logika hapus data chart
             },
@@ -32,13 +32,13 @@ class _CartScreenState extends State<CartScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(225, 223, 6, 112),
+                backgroundColor: Color.fromARGB(255, 255, 204, 229),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 ),
@@ -46,7 +46,7 @@ class _CartScreenState extends State<CartScreen> {
               onPressed: () {
                 Navigator.pop(context); //arahkan ke halaman checkout
               },
-              child: const Text(
+              child: Text(
                 'Go to Checkout',
                 style: TextStyle(color: Colors.black),
               ),

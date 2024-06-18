@@ -23,8 +23,6 @@ class _AddMenuState extends State<AddMenu> {
   final _priceController = TextEditingController();
   int _price = 0;
 
-  String? _selectedCategory; // Variable to hold the selected category
-
   File? galleryFile;
   final picker = ImagePicker();
 
@@ -62,19 +60,15 @@ class _AddMenuState extends State<AddMenu> {
 
   Future getImage(ImageSource img) async {
     final pickedFile = await picker.pickImage(source: img);
-    XFile? xfilePick = pickedFile;
-    setState(
-      () {
-        if (xfilePick != null) {
-          galleryFile = File(pickedFile!.path);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
-              const SnackBar(
-                  content:
-                      Text('Nothing is selected'))); //jika batal mengupload
-        }
-      },
-    );
+    setState(() {
+      if (pickedFile != null) {
+        galleryFile = File(pickedFile.path);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Nothing is selected')),
+        );
+      }
+    });
   }
 
   @override
@@ -90,17 +84,30 @@ class _AddMenuState extends State<AddMenu> {
     debugPrint(_description);
   }
 
-//fungsi input
   Future<void> _postDataWithImage(BuildContext context) async {
     // Check if the image file is selected
     if (galleryFile == null) {
-      return; // Handle case where no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image')),
+      );
+      return;
     }
 
-    var request = MultipartRequest('POST', Uri.parse(Endpoints.menu));
-    request.fields['nama_menu'] = _titleController.text;
-    request.fields['desc_menu'] = _descriptionController.text;
-    request.fields['harga_menu'] = _priceController.text.toString();
+    // Check if the category is selected
+    if (_selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a category')),
+      );
+      return;
+    }
+
+    try {
+      var request =
+          http.MultipartRequest('POST', Uri.parse(Endpoints.menuCreate));
+      request.fields['nama_menu'] = _titleController.text;
+      request.fields['desc_menu'] = _descriptionController.text;
+      request.fields['harga_menu'] = _priceController.text;
+      request.fields['kategori'] = _selectedCategory!;
 
       var multipartFile = await http.MultipartFile.fromPath(
         'img',
@@ -135,7 +142,6 @@ class _AddMenuState extends State<AddMenu> {
         elevation: 0.0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      // ignore: sized_box_for_whitespace
       body: Container(
         width: double.infinity,
         child: Column(
@@ -291,6 +297,34 @@ class _AddMenuState extends State<AddMenu> {
                                       _price = int.tryParse(value) ?? 0;
                                     });
                                   },
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.grey.shade200)),
+                                ),
+                                child: DropdownButtonFormField<String>(
+                                  value: _selectedCategory,
+                                  items: ["FOOD", "BAVERAGE"]
+                                      .map((category) => DropdownMenuItem(
+                                            value: category,
+                                            child: Text(category),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedCategory = value!;
+                                    });
+                                  },
+                                  decoration: const InputDecoration(
+                                    hintText: "Category",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                  ),
+                                  hint: const Text("Select a Category"),
                                 ),
                               ),
                             ],

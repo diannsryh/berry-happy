@@ -45,23 +45,6 @@ class DataService {
     }
   }
 
-  static Future<List<Menu>> fetchMenu1(int page, String search) async {
-    final uri =
-        Uri.parse('${Endpoints.menuRead}').replace(queryParameters: {
-      'search': search,
-      'page': page.toString(),
-    });
-    final response = await http.get(uri);
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as Map<String, dynamic>;
-      return (data['datas'] as List<dynamic>)
-          .map((item) => Menu.fromJson(item as Map<String, dynamic>))
-          .toList();
-    } else {
-      throw Exception('Failed to load datas');
-    }
-  }
-
   static Future<bool> deleteMenu(int menuId) async {
     final response = await http.delete(
       Uri.parse('${Endpoints.menuDelete}/$menuId'),
